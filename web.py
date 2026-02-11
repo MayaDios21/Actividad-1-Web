@@ -10,6 +10,9 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
+        print (self.query_data)
+        url=self.url()
+        print (url.path)
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
@@ -17,7 +20,7 @@ class WebRequestHandler(BaseHTTPRequestHandler):
 
     def get_response(self):
         return f"""
-    <h1> Proyecto web-uno Autor: DiegoMaya </h1>
+    <h1> Proyecto: {path} Autor {qs['Autor']}</h1>
     <p> URL Parse Result : {self.url()}         </p>
     <p> Path Original: {self.path}         </p>
     <p> Headers: {self.headers}      </p>
