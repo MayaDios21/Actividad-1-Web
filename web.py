@@ -10,23 +10,19 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
-        print (self.query_data)
-        url=self.url()
-        print (url.path)
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        self.wfile.write(self.get_response().encode("utf-8"))
-
-    def get_response(self):
-        return f"""
-    <h1> Proyecto: {path} Autor {qs['Autor']}</h1>
-    <p> URL Parse Result : {self.url()}         </p>
-    <p> Path Original: {self.path}         </p>
-    <p> Headers: {self.headers}      </p>
-    <p> Query: {self.query_data()}   </p>
-"""
-
+        url = self.url()
+        if url.path == "/":  
+            try:
+                with open("home.html", "r", encoding="utf-8") as file:
+                    content = file.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+                self.wfile.write(content.encode("utf-8"))
+            except FileNotFoundError:
+                self.send_error(500, "Error interno del servidor: No se encontró el archivo home.html")
+        else:  
+            self.send_error(404, "Página no encontrada")
 
 if __name__ == "__main__":
     print("Starting server")
